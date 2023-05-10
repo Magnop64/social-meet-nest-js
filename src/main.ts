@@ -13,7 +13,7 @@ async function bootstrap() {
     new ValidationPipe({
       transform : true,
       whitelist : true,
-      forbidNonWhitelisted : false // recebe nosso panload , tratar os caracteres vazios , anula o retorno de erros caso vazio.
+      forbidNonWhitelisted : false // recebe nosso pan,load  tratar os caracteres vazios , anula o retorno de erros caso vazio.
     })
   );
 
