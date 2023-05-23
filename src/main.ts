@@ -4,7 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger:['debug','error','log','warn','verbose']
+    logger:['debug','error','log','warn']
   });
 
   app.enableCors();// politica de cors , define quem pode ter acesso a api

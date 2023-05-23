@@ -4,21 +4,36 @@ import { messegeHelp } from "./helpers/messenges.helper";
 import { UserServices } from "src/user/user.services";
 import { cadastroDto } from "src/user/dtos/user.dto";
 import { messageUserhelper } from "src/user/helpers/user.helpers";
+import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
-export class authService{
+export class AuthService{
 
-    private logger = new Logger(authService.name);
+    private logger = new Logger(AuthService.name);
 
-    constructor(private readonly useService : UserServices){}
+    constructor(private readonly useService : UserServices,
+                private readonly jwtService : JwtService
+        ){}
 
-    login(dto : loginDto){
+    async login(dto : loginDto){
         this.logger.debug('login - started')
 
-        if(dto.login != 'user@user.com' || dto.password != 'user123'){
+        const user = await this.useService.GetUserByLoginPassword(dto.login, dto.password);
+
+        if(user == null){
             throw new BadRequestException(messegeHelp.auth_password_or_login_not_faund);
         }
-        return dto;
+        const tokenPayload = {
+            email : user.email,
+            sub : user._id
+        }
+        this.logger.debug(process.env.KEY_JWT_CRYPTO);
+
+        return {
+            nome : user.name,
+            email : user.email,
+            token : this.jwtService.sign(tokenPayload, {secret: process.env.KEY_JWT_CRYPTO})
+        }
     }
 
     async register(dto: cadastroDto){
@@ -26,7 +41,9 @@ export class authService{
         if(await this.useService.existByEmail(dto.email)){
             throw new BadRequestException(messageUserhelper.EXIST_EMAIL_ACONT)
         }
+        console.log(dto)
+        const user = await this.useService.create(dto);
 
-        await this.useService.create(dto);
+        return user
     }
 }
