@@ -27,7 +27,6 @@ export class AuthService{
             email : user.email,
             sub : user._id
         }
-        this.logger.debug(process.env.KEY_JWT_CRYPTO);
 
         return {
             nome : user.name,
@@ -41,9 +40,13 @@ export class AuthService{
         if(await this.useService.existByEmail(dto.email)){
             throw new BadRequestException(messageUserhelper.EXIST_EMAIL_ACONT)
         }
-        console.log(dto)
+
         const user = await this.useService.create(dto);
 
-        return user
+        if(user){
+            return {
+                msg: 'Usuario cadastrado com sucesso..'
+            }
+        }
     }
 }

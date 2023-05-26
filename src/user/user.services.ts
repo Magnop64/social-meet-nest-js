@@ -14,6 +14,8 @@ export class UserServices {
 
         const createdUser = new this.userModel(dto);
         await createdUser.save();
+        
+        return createdUser
     }
 
     async existByEmail(email : string) : Promise<boolean>{
@@ -31,11 +33,11 @@ export class UserServices {
         if(result && result.length > 0){
             const user = result[0] as DocumentUser;
 
-            const bytesPassword = CryptoJS.AES.decrypt(user.password, process.env.KEY_JWT_CRYPTO);
+            const bytesPassword = CryptoJS.AES.decrypt(user.password, process.env.key_Crypto);
 
             const passwordSavad = bytesPassword.toString(CryptoJS.enc.Utf8);
-
-            if(user.password === passwordSavad){
+           
+            if(password === passwordSavad){
                 return user;
             }
         }
