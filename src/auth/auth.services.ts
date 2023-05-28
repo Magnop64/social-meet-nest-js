@@ -45,7 +45,7 @@ export class AuthService{
 
         if(user){
             return {
-                msg: 'Usuario cadastrado com sucesso..'
+                message: messageUserhelper.USER_REGISTER
             }
         }
     }
