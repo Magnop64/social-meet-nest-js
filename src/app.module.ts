@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { moduleUser } from './user/user.module';
 import { APP_GUARD } from '@nestjs/core';
 import { jwtAuthGuard } from './auth/guards/jwt.guards';
+import { MeetModule } from './meet/meet.module';
 
 
 @Module({
