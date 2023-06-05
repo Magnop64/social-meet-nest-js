@@ -1,6 +1,8 @@
-import { Prop, Schema } from "@nestjs/mongoose";
-import mongoose from "mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import mongoose, { HydratedDocument } from "mongoose";
 import { user } from "src/user/schema/user.schema";
+
+export type MeetDocument = HydratedDocument<SchemaMeet>;
 
 @Schema()
 export class SchemaMeet{
@@ -16,3 +18,5 @@ export class SchemaMeet{
     @Prop({required: true})
     link: string;
 }
+
+export const MeetSchema = SchemaFactory.createForClass(SchemaFactory);
