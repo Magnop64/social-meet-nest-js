@@ -1,13 +1,13 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Schema , Prop, SchemaFactory} from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
-import { user } from "src/user/schema/user.schema";
+import { User } from "src/user/schema/user.schema";
 
-export type MeetDocument = HydratedDocument<SchemaMeet>;
+export type MeetDocument = HydratedDocument<Meet>
 
 @Schema()
-export class SchemaMeet{
-    @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'user'})
-    user: user
+export class Meet{
+    @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'User'})
+    user: User;
 
     @Prop({required: true})
     name: string;
@@ -19,4 +19,4 @@ export class SchemaMeet{
     link: string;
 }
 
-export const MeetSchema = SchemaFactory.createForClass(SchemaFactory);
+export const SchemaMeet = SchemaFactory.createForClass(Meet);

@@ -1,14 +1,14 @@
 import {Model} from 'mongoose';
 import { Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
-import { user, DocumentUser } from './schema/user.schema';
+import { User, DocumentUser } from './schema/user.schema';
 import { cadastroDto } from './dtos/user.dto';
 import  * as CryptoJS from 'crypto-js';
 import { updateUserDto } from './dtos/updatuser.dto';
 
 @Injectable()
 export class UserServices {
-    constructor(@InjectModel(user.name) private userModel : Model<DocumentUser> ){}
+    constructor(@InjectModel(User.name) private userModel : Model<DocumentUser> ){}
 
     async create (dto : cadastroDto){
         dto.password = CryptoJS.AES.encrypt(dto.password, process.env.key_Crypto).toString();
@@ -34,9 +34,9 @@ export class UserServices {
         if(result && result.length > 0){
             const user = result[0] as DocumentUser;
 
-            const bytesPassword = CryptoJS.AES.decrypt(user.password, process.env.key_Crypto);
+            const bytesPassword = await CryptoJS.AES.decrypt(user.password, process.env.key_Crypto);
 
-            const passwordSavad = bytesPassword.toString(CryptoJS.enc.Utf8);
+            const passwordSavad = await bytesPassword.toString(CryptoJS.enc.Utf8);
            
             if(password === passwordSavad){
                 return user;
@@ -46,7 +46,7 @@ export class UserServices {
     }
 
     async getUserById(id : string){
-        return this.userModel.findOne({_id : id});
+        return await this.userModel.findOne({_id : id});
     }
 
     async updateUserId(id:string, dto: updateUserDto){
