@@ -9,7 +9,7 @@ import { SchemaMeet } from './schema/modelMeet.schema';
 @Module({
   imports: [moduleUser, MongooseModule.forFeature([{name: GetMeet.name, schema: SchemaMeet}])],
   controllers: [MeetController],
-  providers: [ MeetServices],
+  providers: [MeetServices],
   exports: [ MongooseModule, MeetServices],
 })
 

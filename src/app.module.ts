@@ -14,7 +14,6 @@ import { MeetModule } from './meet/meet.module';
     MongooseModule.forRoot(process.env.key_DataBase),
     authModule,
     moduleUser,
-    MeetModule
   ],
   controllers: [],
   providers: [
