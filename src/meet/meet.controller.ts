@@ -1,21 +1,21 @@
 import { Controller , Get, Request, Post, Body, Delete, Param} from '@nestjs/common';
-import { MeetServices } from './meet.service';
+import { meetServices } from './meet.service';
 import { GetMeet } from './dto/getMeet.dto';
 import { createMeet } from './dto/createMeet.dto';
+import { UserServices } from 'src/user/user.services';
 
 
 @Controller('meet')
 export class MeetController {
     constructor(
-        private readonly meetService: MeetServices
+        private readonly service: meetServices,
+        private readonly userSevice: UserServices
     ){}
 
     @Get()
     async getUser(@Request() req){
         const { userId } = req?.user
-        console.log(userId)
-        const result = await  this.meetService.GetMeetByUser(userId);
-
+        const result = await  this.service.GetMeetByUser(userId);
         return result?.map((meet) => ({
             id: meet._id.toString(),
             name: meet.name,
@@ -26,8 +26,8 @@ export class MeetController {
 
     @Post()
     async createdMeet(@Request() req, @Body() dto: createMeet){
-        const { userid } = req?.user;
-        await this.meetService.CreateMeet(userid, dto);
+        const { userId } = req?.user;
+        return await this.service.CreateMeet(userId, dto);
     }
 
     @Delete(':id')
@@ -35,6 +35,6 @@ export class MeetController {
          const { userId } = req?.user;
          const { id } = params;
 
-         await this.meetService.DeleteMeet(userId, id);
+         await this.service.DeleteMeet(userId, id);
     }
 }

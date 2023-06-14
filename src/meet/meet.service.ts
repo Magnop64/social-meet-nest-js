@@ -7,36 +7,35 @@ import { UserServices } from "src/user/user.services";
 import { GenerateLink } from "./helper/linkGenerate.helper";
 
 @Injectable()
-export class MeetServices{
-    private readonly logger = new Logger(MeetServices.name);
+export class meetServices{
+    private readonly logger = new Logger(meetServices.name);
 
     constructor(
-        @InjectModel(Meet.name) private meetModel: Model<MeetDocument>,
+        @InjectModel(Meet.name) private model: Model<MeetDocument>,
         private readonly userSevice: UserServices
     ){}
     
     async GetMeetByUser(userId:string){
         this.logger.debug(`GetMeetByUser - ${userId}`);
-        return await this.meetModel.find({user: userId});
+        return await this.model.find({user: userId});
     }
 
     async CreateMeet(userId:string, dto:createMeet){
         this.logger.debug(`CreateMeet - ${userId}`)
         
         const user = await this.userSevice.getUserById(userId);
-
-         const meet = [{
+         const meet = {
             ...dto,
             user,
             link: GenerateLink()
-         }];
+         };
 
-        const createdMeet = new this.meetModel(meet);
-        return await createdMeet.save();
+        const createdMeet = new this.model(meet);
+        await createdMeet.save();
     }
 
     async DeleteMeet(userId: string, meetId:string){
         this.logger.debug(`DeleteMeet - ${userId} - ${meetId}`);
-        return await this.meetModel.deleteOne({user: userId, _id: meetId});
+        return await this.model.deleteOne({user: userId, _id: meetId});
     }
 }
