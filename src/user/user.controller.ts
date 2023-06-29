@@ -10,7 +10,9 @@ export class userController{
      @Get()
      async getUser(@Request() req : any){
         const {userId} = req?.user;
-
+        if(!userId){
+            throw new BadRequestException(messageUserhelper.USER_NOT_FAUND);
+        }
         const user = await this.userService.getUserById(userId);
         if(!user){
             throw new BadRequestException(messageUserhelper.USER_NOT_FAUND);
